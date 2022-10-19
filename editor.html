@@ -28,7 +28,7 @@
       const editor = document.getElementById("jsonEditor");
       const status = document.getElementById("status");
       let timer = 0;
-      let savetime = 1500;
+      let savetime = 5000;
       editor.oninput = () => {
           status.innerHTML = '<p></p>';
           if (timer) { clearTimeout(timer); }
