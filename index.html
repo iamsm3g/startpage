@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Start...</title>
+    <meta content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="bookmarks">
+        <script>
+          let contents = JSON.parse(localStorage.getItem('contents'));
+          console.log(contents);
+          if (contents === null) {
+              contents = {
+                  "GitHub": {
+                      "startpage": "https://github.com/vtj-ttanaka/startpage"
+                  },
+                  "Reddit": {
+                      "unixporn": "https://reddit.com/r/unixporn",
+                      "startpages": "https://reddit.com/r/startpages"
+                  },
+                  "Tools": {
+                      "startpage editor": "./editor.html"
+                  }
+              }
+              localStorage.setItem('contents', JSON.stringify(contents));
+          }
+          for (let c in contents) {
+              document.write('<div class="square"><div class="square-header">' + c + '</div>');
+              for (let v in contents[c]) {
+                  document.write('<a href="' + contents[c][v] + '">' + v + '</a>');
+              }
+              document.write('</div>');
+          }
+        </script>
+      </div>
+    </div>
+  </body>
+</html>
