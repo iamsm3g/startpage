@@ -2,63 +2,73 @@
 <html>
   <head>
     <title>Editor</title>
-  </head>
-  <style>
-    .ok {
-        color: green;
-    }
-    .ng {
-        color: red;
-    }
-  </style>
-  <body>
-    <textarea id="jsonEditor" rows="40" cols="100"></textarea><br>
-    <div id="status"></div>
-
+    <style>
+      #ok {
+          color: green;
+      }
+      #ng {
+          color: red;
+      }
+      table {
+          height: 56px;
+      }
+    </style>
     <script>
-      const isJson = text => {
-          try {
-              JSON.parse(text);
-          } catch (e) {
-              return false;
+      const jsonparse = text => {
+          try { return JSON.parse(text); }
+          catch(e) { return false; }
+      };
+
+      const save = () => {
+          const editor = document.getElementById("jsonEditor");
+          const json = jsonparse(editor.value);
+          const ok = document.getElementById("ok");
+          const ng = document.getElementById("ng");
+
+          ok.style.display = "none";
+          ng.style.display = "none";
+
+          if(json) {
+              editor.value = JSON.stringify(json, null, 2);
+              localStorage.setItem('contents', editor.value);
+              ok.style.display = "block";
+          } else {
+              ng.style.display = "block";
           }
-          return true;
       };
 
-      const editor = document.getElementById("jsonEditor");
-      const status = document.getElementById("status");
-      let timer = 0;
-      let savetime = 5000;
-      editor.oninput = () => {
-          status.innerHTML = '<p></p>';
-          if (timer) { clearTimeout(timer); }
-          timer = setTimeout(() => {
-              if (isJson(editor.value)) {
-                  editor.value = JSON.stringify(JSON.parse(editor.value), null, 2);
-                  localStorage.setItem('contents', editor.value);
-                  status.innerHTML = '<p class="ok">save</p>';
-              } else {
-                  status.innerHTML = '<p class="ng">json parse error</p>';
-              }
-          }, savetime);
+      const load = () => {
       };
 
-      let contents = localStorage.getItem("contents");
-      if (contents && isJson(contents)) {
-          editor.value = JSON.stringify(JSON.parse(contents), null, 2);
-      } else {
-          const example = {
+    </script>
+  </head>
+  <body>
+    <textarea id="jsonEditor" rows="40" cols="100"></textarea>
+    <table>
+      <tr>
+        <td><input id="saveButton" type="button" value="save" onclick="save()"></td>
+        <td>
+          <p id="ok">save</p>
+          <p id="ng">json parse error</p>
+        </td>
+      </tr>
+    </table>
+    <script>
+      let json = jsonparse(localStorage.getItem("contents"));
+      if (!json) {
+          json = {
               "GitHub": {
-                  "startpage": "https://github.com/vtj-ttanaka/startpage"
+                  "startpage": "https://github.com/iamsm3g/startpage"
               },
               "Reddit": {
                   "r/unixporn": "https://reddit.com/r/unixporn/",
                   "r/startpages": "https://www.reddit.com/r/startpages/"
               }
           };
-          editor.value = JSON.stringify(example, null, 2);
-          console.log(JSON.stringify(example));
       }
+      document.getElementById("jsonEditor").value = JSON.stringify(json, null, 2);
+      document.getElementById("ok").style.display = "none";
+      document.getElementById("ng").style.display = "none";
     </script>
   </body>
 </html>
