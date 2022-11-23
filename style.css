@@ -56,3 +56,8 @@ a {
 a:hover {
   color: #fff;
 }
+
+
+.wf-notosansjapanese {
+    font-family: "Noto Sans JP";
+}
